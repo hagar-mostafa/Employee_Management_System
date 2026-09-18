@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 /*builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();*/
 
+// test 
+
 
 // Link the DB
 builder.Services.AddDbContext<AppDbContext>(options =>
