@@ -1,0 +1,92 @@
+﻿@model Grad_Project.Models.Department
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="content">
+
+    <div class="section-header">
+        <div>
+            <h2>Department Details</h2>
+            <p>View department information and employees count.</p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back to Departments
+        </a>
+    </div>
+
+    <div class="detail-header-card">
+
+        <div class="detail-avatar">
+            @Model.Name.Substring(0, 1).ToUpper()
+        </div>
+
+        <div class="detail-info">
+
+            <h2>@Model.Name</h2>
+
+            <div class="subtitle">
+                Department
+            </div>
+
+            <div class="detail-tags">
+                <span class="badge badge-blue">
+                    Department #@Model.Id
+                </span>
+
+                <span class="badge badge-green">
+                    @(Model.Employees?.Count ?? 0) Employees
+                </span>
+            </div>
+
+        </div>
+
+        <div class="detail-actions">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Edit
+            </a>
+
+            <a asp-action="Delete"
+               asp-route-id="@Model.Id"
+               class="btn btn-danger">
+                Delete
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="form-card">
+
+        <div class="form-card-title">
+            <span>Department Information</span>
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+                <label>Department ID</label>
+                <p>@Model.Id</p>
+            </div>
+
+            <div class="info-item">
+                <label>Department Name</label>
+                <p>@Model.Name</p>
+            </div>
+
+            <div class="info-item">
+                <label>Employees</label>
+                <p>@(Model.Employees?.Count ?? 0)</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
