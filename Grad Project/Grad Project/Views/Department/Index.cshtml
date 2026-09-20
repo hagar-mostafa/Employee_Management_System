@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Grad_Project.Models.Department>
+
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<div class="content">
+
+    <!-- Page Header -->
+    <div class="section-header">
+        <div>
+            <h2>Departments</h2>
+            <p>Manage all departments in the organization.</p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Add Department
+        </a>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <!-- Departments Table -->
+    <div class="table-card">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Employees</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.Name</strong>
+                        </td>
+
+                        <td>
+                            <span class="badge badge-blue">
+                                @(item.Employees?.Count ?? 0)
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="action-btns">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="act-btn view"
+                                   title="View Details">
+                                    View
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.Id"
+                                   class="act-btn edit"
+                                   title="Edit Department">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="act-btn delete"
+                                   title="Delete Department">
+                                    Delete
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="3"
+                            style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            No departments found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

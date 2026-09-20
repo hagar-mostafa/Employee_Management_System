@@ -1,0 +1,71 @@
+﻿@model Grad_Project.Models.Department
+
+@{
+    ViewData["Title"] = "Create Department";
+}
+
+<div class="content">
+
+    <div class="section-header">
+        <div>
+            <h2>Create Department</h2>
+            <p>Add a new department to the organization.</p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Back to Departments
+        </a>
+    </div>
+
+    <div class="form-card">
+
+        <div class="form-card-title">
+            <span>Department Information</span>
+        </div>
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert error">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="form-label">
+                    Department Name
+                    <span class="req">*</span>
+                </label>
+
+                <input asp-for="Name"
+                       class="form-control"
+                       placeholder="Enter department name" />
+
+                <span asp-validation-for="Name"
+                      class="field-validation-error">
+                </span>
+            </div>
+
+            <div class="form-actions">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Create Department
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
