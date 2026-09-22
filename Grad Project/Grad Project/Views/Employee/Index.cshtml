@@ -435,61 +435,54 @@
 
 
             <!-- Filters -->
-            <div class="filter-card">
+            <form method="get" asp-action="Index">
+                <div class="filter-card">
 
-                <span class="filter-label">
-                    Department
-                </span>
+                    <span class="filter-label">Department</span>
+                    <!-- Added name="departmentId" to match the controller parameter -->
+                    <select class="filter-select" name="departmentId">
+                        <option value="">All Departments</option>
 
-                <select class="filter-select">
-                    <option>All Departments</option>
+                        <!-- Loop through the ViewBag instead of Model -->
+                        @foreach (var department in ViewBag.Departments)
+                        {
+                            <option value="@department.Id">@department.Name</option>
+                        }
+                    </select>
 
-                    @foreach (var department in Model
-                                        .Where(e => e.Department != null)
-                                        .Select(e => e.Department.Name)
-                                        .Distinct()
-                                        .OrderBy(x => x))
-                    {
-                        <option>@department</option>
-                    }
-                </select>
+                    <div class="filter-divider"></div>
 
+                    <span class="filter-label">Job Title</span>
+                    <!-- Added name="jobTitleId" -->
+                    <select class="filter-select" name="jobTitleId">
+                        <option value="">All Titles</option>
 
-                <div class="filter-divider"></div>
+                        <!-- Loop through the ViewBag -->
+                        @foreach (var jobTitle in ViewBag.JobTitles)
+                        {
+                            <option value="@jobTitle.Id">@jobTitle.Title</option>
+                        }
+                    </select>
 
+                    <div class="filter-divider"></div>
 
-                <span class="filter-label">
-                    Job Title
-                </span>
+                    <!-- Added name="searchString" -->
+                    <input type="text"
+                           class="filter-search"
+                           name="SearchText"
+                           placeholder="Search..." />
 
-                <select class="filter-select">
-                    <option>All Titles</option>
+                    <!-- Added the Search Button inside the form -->
+                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">
+                        Search
+                    </button>
 
-                    @foreach (var jobTitle in Model
-                                        .Where(e => e.JobTitle != null)
-                                        .Select(e => e.JobTitle.Title)
-                                        .Distinct()
-                                        .OrderBy(x => x))
-                    {
-                        <option>@jobTitle</option>
-                    }
-                </select>
+                    <span class="showing-count" style="margin-left: auto;">
+                        Showing @Model.Count() employees
+                    </span>
 
-
-                <div class="filter-divider"></div>
-
-
-                <input type="text"
-                       class="filter-search"
-                       placeholder="Search..." />
-
-
-                <span class="showing-count">
-                    Showing @Model.Count() employees
-                </span>
-
-            </div>
-
+                </div>
+            </form>
 
             <!-- Employees Table -->
             <div class="table-card">

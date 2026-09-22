@@ -1,5 +1,6 @@
 ﻿using Grad_Project.Data;
 using Grad_Project.Models;
+using Grad_Project.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,20 +15,25 @@ namespace Grad_Project.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(EmployeeParams employeeParams)
         {
-            var employees = await _context.Employees
-                .Include(e => e.Department)
-                .Include(e => e.JobTitle)
-                .ToListAsync();
+            var spec = new EmployeeSpecification(employeeParams);
+            IQueryable<Employee> query = _context.Employees;
+            var finalQuery = SpecificationEvaluator.CreateQuery(query, spec);
 
+            ViewBag.Departments = await _context.Departments.ToListAsync();
+            ViewBag.JobTitles = await _context.JobTitles.ToListAsync();
+            var employees = await finalQuery.ToListAsync();
+           
             return View(employees);
         }
 
-        public IActionResult Create()
+
+
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Departments = _context.Departments.ToList();
-            ViewBag.JobTitles = _context.JobTitles.ToList();
+            ViewBag.Departments = await _context.Departments.ToListAsync();
+            ViewBag.JobTitles = await _context.JobTitles.ToListAsync();
 
             return View();
         }
@@ -37,13 +43,14 @@ namespace Grad_Project.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _context.Departments.ToList();
-                ViewBag.JobTitles = _context.JobTitles.ToList();
+                ViewBag.Departments = await _context.Departments.ToListAsync();
+                ViewBag.JobTitles = await _context.JobTitles.ToListAsync();
+
 
                 return View(employee);
             }
 
-            _context.Employees.Add(employee);
+            await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -75,8 +82,9 @@ namespace Grad_Project.Controllers
             if (employee == null)
                 return NotFound();
 
-            ViewBag.Departments = _context.Departments.ToList();
-            ViewBag.JobTitles = _context.JobTitles.ToList();
+            ViewBag.Departments = await _context.Departments.ToListAsync();
+            ViewBag.JobTitles = await _context.JobTitles.ToListAsync();
+
 
             return View(employee);
         }
@@ -89,8 +97,9 @@ namespace Grad_Project.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _context.Departments.ToList();
-                ViewBag.JobTitles = _context.JobTitles.ToList();
+                ViewBag.Departments = await _context.Departments.ToListAsync();
+                ViewBag.JobTitles = await _context.JobTitles.ToListAsync();
+
 
                 return View(employee);
             }
@@ -102,7 +111,7 @@ namespace Grad_Project.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Employees.Any(e => e.Id == employee.Id))
+                if (!await _context.Employees.AnyAsync(e => e.Id == employee.Id))
                     return NotFound();
 
                 throw;
