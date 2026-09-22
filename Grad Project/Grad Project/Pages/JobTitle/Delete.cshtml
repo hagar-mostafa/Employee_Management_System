@@ -1,0 +1,44 @@
+@page "{id:int}"
+@model Grad_Project.Pages.JobTitlePages.DeleteModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Delete Job Title";
+}
+
+<div class="section-header">
+    <div>
+        <h2>Delete Job Title</h2>
+        <p>This action cannot be undone</p>
+    </div>
+    <a asp-page="./Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div style="max-width:500px">
+    <div class="form-card">
+        <div class="modal-icon" style="margin-bottom:16px">
+            <i class="fas fa-trash"></i>
+        </div>
+
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:8px">
+            Are you sure?
+        </h3>
+        <p style="font-size:13.5px;color:var(--text-sub);margin-bottom:20px;line-height:1.6">
+            You are about to delete the job title
+            <strong>@Model.JobTitle.Title</strong>.
+            This action cannot be undone.
+        </p>
+
+        <form method="post">
+            <input type="hidden" asp-for="JobTitle.Id" />
+            <div class="form-actions">
+                <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
