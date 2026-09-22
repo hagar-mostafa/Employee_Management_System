@@ -1,0 +1,277 @@
+﻿@model Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<style>
+    .page-container {
+        padding: 30px;
+        background: #f5f7fb;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+        .page-header h2 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+    .details-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 900px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+
+    .employee-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .employee-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #2563eb;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .employee-header h3 {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .employee-header p {
+        margin: 4px 0 0;
+        color: #6b7280;
+    }
+
+    .detail-item {
+        margin-bottom: 22px;
+    }
+
+    .detail-label {
+        display: block;
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        font-size: 16px;
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .btn-edit {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+        .btn-edit:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+    .btn-back {
+        padding: 10px 22px;
+        border-radius: 8px;
+        margin-left: 8px;
+    }
+</style>
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Employee Details</h2>
+
+            <p class="text-muted mb-0">
+                View employee information
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            ← Back to Employees
+        </a>
+
+    </div>
+
+    <div class="details-card">
+
+        <div class="employee-header">
+
+            <div class="employee-avatar">
+                @Model.FullName.Substring(0, 1).ToUpper()
+            </div>
+
+            <div>
+                <h3>@Model.FullName</h3>
+
+                <p>
+                    @Model.JobTitle?.Title
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Full Name
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.FullName
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Email
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.Email
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Phone Number
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.PhoneNumber
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Department
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.Department?.Name
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Job Title
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.JobTitle?.Title
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Hire Date
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.HireDate.ToShortDateString()
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Salary
+                    </span>
+
+                    <div class="detail-value">
+                        @Model.Salary.ToString("N2")
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div class="mt-4">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn-edit">
+                Edit Employee
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary btn-back">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

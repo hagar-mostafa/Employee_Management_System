@@ -48,7 +48,7 @@ namespace Grad_Project.Models
         public string ProfileImagePath { get; set; }
 
         // Navigation Properties
-        public Department Department { get; set; }
-        public JobTitle JobTitle { get; set; }
+        public Department? Department { get; set; }
+        public JobTitle? JobTitle { get; set; }
     }
 }
