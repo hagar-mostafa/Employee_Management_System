@@ -16,7 +16,7 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public JobTitle JobTitle { get; set; } = default!;
+    public Grad_Project.Models.JobTitle JobTitle { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {

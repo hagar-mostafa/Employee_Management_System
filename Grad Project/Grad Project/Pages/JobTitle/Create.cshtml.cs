@@ -16,7 +16,7 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public JobTitle JobTitle { get; set; } = default!;
+    public Grad_Project.Models.JobTitle JobTitle { get; set; } = default!;
 
     public IActionResult OnGet()
     {

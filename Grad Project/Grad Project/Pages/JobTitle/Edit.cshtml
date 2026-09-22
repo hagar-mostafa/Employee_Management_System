@@ -1,0 +1,55 @@
+@page "{id:int}"
+@model Grad_Project.Pages.JobTitlePages.EditModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit Job Title";
+}
+
+<div class="section-header">
+    <div>
+        <h2>Edit Job Title</h2>
+        <p>Update job title information</p>
+    </div>
+    <a asp-page="./Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div style="max-width:500px">
+    <div class="form-card">
+        <div class="form-card-title">
+            <i class="fas fa-pen"></i> Edit Job Title
+        </div>
+
+        <form method="post">
+            <input type="hidden" asp-for="JobTitle.Id" />
+
+            <div asp-validation-summary="ModelOnly" class="alert error" style="display:@(ViewData.ModelState.IsValid ? "none" : "flex")">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Please fix the errors below.</span>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px">
+                <label asp-for="JobTitle.Title" class="form-label">
+                    Job Title <span class="req">*</span>
+                </label>
+                <input asp-for="JobTitle.Title"
+                       class="form-control"
+                       placeholder="e.g. Senior Developer" />
+                <span asp-validation-for="JobTitle.Title" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
