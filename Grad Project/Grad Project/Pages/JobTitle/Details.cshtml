@@ -1,17 +1,54 @@
-@page
+@page "{id:int}"
 @model Grad_Project.Pages.JobTitlePages.DetailsModel
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Job Title Details";
 }
 
-<h1 class="h3">Job Title Details</h1>
-<hr />
+<div class="section-header">
+    <div>
+        <h2>Job Title Details</h2>
+        <p>View job title information</p>
+    </div>
+    <a asp-page="./Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
 
-<dl class="row">
-    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.JobTitle.Title)</dt>
-    <dd class="col-sm-10">@Model.JobTitle.Title</dd>
-</dl>
+<div class="detail-header-card">
+    <div class="detail-avatar">
+        <i class="fas fa-briefcase" style="font-size:28px"></i>
+    </div>
+    <div class="detail-info">
+        <h2>@Model.JobTitle.Title</h2>
+        <div class="subtitle">Job Title #@Model.JobTitle.Id</div>
+        <div class="detail-tags">
+            <span class="badge badge-blue">Active</span>
+        </div>
+    </div>
+    <div class="detail-actions">
+        <a asp-page="./Edit" asp-route-id="@Model.JobTitle.Id" class="btn btn-secondary btn-sm">
+            <i class="fas fa-pen"></i> Edit
+        </a>
+        <a asp-page="./Delete" asp-route-id="@Model.JobTitle.Id" class="btn btn-danger btn-sm">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+    </div>
+</div>
 
-<a asp-page="./Edit" asp-route-id="@Model.JobTitle.Id" class="btn btn-warning">Edit</a>
-<a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+<div class="form-card">
+    <div class="form-card-title">
+        <i class="fas fa-info-circle"></i> Information
+    </div>
+    <div class="info-grid">
+        <div class="info-item">
+            <label>Job Title</label>
+            <p>@Model.JobTitle.Title</p>
+        </div>
+        <div class="info-item">
+            <label>ID</label>
+            <p>#@Model.JobTitle.Id</p>
+        </div>
+    </div>
+</div>
