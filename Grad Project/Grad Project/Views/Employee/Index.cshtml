@@ -13,6 +13,13 @@
         color: #1f2937;
     }
 
+    .page-btn.disabled {
+        pointer-events: none; /* Completely disables clicking */
+        opacity: 0.4; /* Makes it look faded/inactive */
+        background-color: #f8f9fb;
+        color: #a0aabf;
+    }
+
     .staffhub-wrapper {
         display: flex;
         min-height: calc(100vh - 0px);
@@ -120,10 +127,10 @@
         text-decoration: none;
     }
 
-    .add-btn:hover {
-        background-color: #2f63d2;
-        color: white;
-    }
+        .add-btn:hover {
+            background-color: #2f63d2;
+            color: white;
+        }
 
     /* Filters */
     .filter-card {
@@ -190,54 +197,54 @@
         table-layout: fixed;
     }
 
-    .employee-table th {
-        background-color: #f8f9fb;
-        color: #657083;
-        font-size: 9px;
-        text-align: left;
-        padding: 10px 15px;
-        border-bottom: 1px solid #e4e7ec;
-        letter-spacing: .3px;
-    }
+        .employee-table th {
+            background-color: #f8f9fb;
+            color: #657083;
+            font-size: 9px;
+            text-align: left;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e4e7ec;
+            letter-spacing: .3px;
+        }
 
-    .employee-table td {
-        padding: 10px 15px;
-        border-bottom: 1px solid #edf0f3;
-        font-size: 10px;
-        vertical-align: middle;
-    }
+        .employee-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #edf0f3;
+            font-size: 10px;
+            vertical-align: middle;
+        }
 
-    .employee-table tbody tr:hover {
-        background-color: #fafbfc;
-    }
+        .employee-table tbody tr:hover {
+            background-color: #fafbfc;
+        }
 
-    .employee-table th:nth-child(1) {
-        width: 23%;
-    }
+        .employee-table th:nth-child(1) {
+            width: 23%;
+        }
 
-    .employee-table th:nth-child(2) {
-        width: 16%;
-    }
+        .employee-table th:nth-child(2) {
+            width: 16%;
+        }
 
-    .employee-table th:nth-child(3) {
-        width: 12%;
-    }
+        .employee-table th:nth-child(3) {
+            width: 12%;
+        }
 
-    .employee-table th:nth-child(4) {
-        width: 17%;
-    }
+        .employee-table th:nth-child(4) {
+            width: 17%;
+        }
 
-    .employee-table th:nth-child(5) {
-        width: 12%;
-    }
+        .employee-table th:nth-child(5) {
+            width: 12%;
+        }
 
-    .employee-table th:nth-child(6) {
-        width: 10%;
-    }
+        .employee-table th:nth-child(6) {
+            width: 10%;
+        }
 
-    .employee-table th:nth-child(7) {
-        width: 10%;
-    }
+        .employee-table th:nth-child(7) {
+            width: 10%;
+        }
 
     .employee-info {
         display: flex;
@@ -315,9 +322,9 @@
         font-size: 11px;
     }
 
-    .action-btn:hover {
-        background-color: #f3f5f8;
-    }
+        .action-btn:hover {
+            background-color: #f3f5f8;
+        }
 
     .view-btn {
         color: #3973e8;
@@ -363,11 +370,11 @@
         text-decoration: none;
     }
 
-    .page-btn.active {
-        background-color: #3973e8;
-        border-color: #3973e8;
-        color: white;
-    }
+        .page-btn.active {
+            background-color: #3973e8;
+            border-color: #3973e8;
+            color: white;
+        }
 </style>
 
 
@@ -441,12 +448,20 @@
                     <span class="filter-label">Department</span>
                     <!-- Added name="departmentId" to match the controller parameter -->
                     <select class="filter-select" name="departmentId">
+
                         <option value="">All Departments</option>
 
                         <!-- Loop through the ViewBag instead of Model -->
                         @foreach (var department in ViewBag.Departments)
                         {
-                            <option value="@department.Id">@department.Name</option>
+                            if (ViewBag.CurrentParams?.DepartmentId == department.Id)
+                            {
+                                <option value="@department.Id" selected>@department.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@department.Id">@department.Name</option>
+                            }
                         }
                     </select>
 
@@ -460,16 +475,27 @@
                         <!-- Loop through the ViewBag -->
                         @foreach (var jobTitle in ViewBag.JobTitles)
                         {
-                            <option value="@jobTitle.Id">@jobTitle.Title</option>
+                            if (ViewBag.CurrentParams?.JobTitleId == jobTitle.Id)
+                            {
+                                <option value="@jobTitle.Id" selected>@jobTitle.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@jobTitle.Id">@jobTitle.Title</option>
+                            }
                         }
                     </select>
 
                     <div class="filter-divider"></div>
 
                     <!-- Added name="searchString" -->
+                    @* @{
+                        var searchText = ViewBag.CurrentParams ?? "Search..":ViewBag.CurrentParams.SearchText;
+                    } *@
                     <input type="text"
                            class="filter-search"
                            name="SearchText"
+                           value="@ViewBag.CurrentParams?.SearchText"
                            placeholder="Search..." />
 
                     <!-- Added the Search Button inside the form -->
@@ -532,10 +558,22 @@
 
                                     <td>
                                         <div class="employee-info">
+                                            @if (string.IsNullOrWhiteSpace(employee.ProfileImagePath))
+                                            {
 
-                                            <div class="employee-avatar">
-                                                @initials
-                                            </div>
+                                                <div class="employee-avatar">
+                                                    @initials
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="employee-avatar">
+                                                    <img src="@Url.Action("Picture", "Employee", new { id = employee.Id })"
+                                                         alt="@employee.FullName"
+                                                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+                                                </div>
+
+                                            }
 
                                             <div>
                                                 <div class="employee-name">
@@ -627,44 +665,56 @@
 
                 <!-- Table Footer -->
                 <div class="table-footer">
+                    @{
+                        var currentPage = (int)ViewBag.CurrentPage;
+                        var totalPages = (int)ViewBag.TotalPages;
+                        var totalItems = (int)ViewBag.TotalItems;
+                        var pageSize = (int)ViewBag.PageSize;
+                        var currentParams = (Grad_Project.Models.EmployeeParams)ViewBag.CurrentParams;
+
+                        // Calculate the range of items currently being displayed
+                        var startItem = totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+                        var endItem = Math.Min(currentPage * pageSize, totalItems);
+                    }
 
                     <div class="footer-text">
-                        Showing 1-@Model.Count() of @Model.Count() employees
+                        Showing @startItem-@endItem of @totalItems employees
                     </div>
-
 
                     <div class="pagination">
 
-                        <a href="#" class="page-btn">
+                        <!-- Previous Page Button -->
+                        <a href="@(currentPage > 1 ? Url.Action("Index", new { PageNumber = currentPage - 1, DepartmentId = currentParams.DepartmentId, JobTitleId = currentParams.JobTitleId, SearchText = currentParams.SearchText }) : "javascript:void(0);")"
+                           class="page-btn @(currentPage <= 1 ? "disabled" : "")">
                             ‹
                         </a>
 
-                        <a href="#" class="page-btn active">
-                            1
-                        </a>
+                        <!-- Dynamic Page Numbers -->
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            if (i == currentPage)
+                            {
+                                <span class="page-btn active">@i</span>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Index", new
+                                   {
+                                       PageNumber = i,
+                                       DepartmentId = currentParams.DepartmentId,
+                                       JobTitleId = currentParams.JobTitleId,
+                                       SearchText = currentParams.SearchText
+                                   })" class="page-btn">@i</a>
+                            }
+                        }
 
-                        <a href="#" class="page-btn">
-                            2
-                        </a>
-
-                        <a href="#" class="page-btn">
-                            3
-                        </a>
-
-                        <span class="page-btn">
-                            ...
-                        </span>
-
-                        <a href="#" class="page-btn">
-                            5
-                        </a>
-
-                        <a href="#" class="page-btn">
+                        <!-- Next Page Button -->
+                        <a href="@(currentPage < totalPages ? Url.Action("Index", new { PageNumber = currentPage + 1, DepartmentId = currentParams.DepartmentId, JobTitleId = currentParams.JobTitleId, SearchText = currentParams.SearchText }) : "javascript:void(0);")"
+                           class="page-btn @(currentPage >= totalPages || totalPages == 0 ? "disabled" : "")">
                             ›
                         </a>
 
                     </div>
-
                 </div>
 
             </div>

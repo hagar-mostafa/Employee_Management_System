@@ -31,38 +31,56 @@
         box-shadow: 0 2px 10px rgba(0,0,0,.05);
     }
 
+    /* Updated Larger, Modern Header Profile Section */
     .employee-header {
         display: flex;
         align-items: center;
-        gap: 15px;
-        padding-bottom: 25px;
-        margin-bottom: 25px;
-        border-bottom: 1px solid #eee;
+        gap: 25px;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eaeaea;
     }
 
     .employee-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
+        width: 130px;
+        height: 160px; /* Changed to a portrait (vertical) shape to fit more of the photo */
+        border-radius: 16px; /* Modern rounded corners instead of a strict circle */
         background: #2563eb;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 42px;
         font-weight: 700;
+        overflow: hidden;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+        border: 4px solid #ffffff;
     }
+
+        .employee-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center; /* MAGIC FIX: Anchors the image to the top so the head is never cut off */
+        }
 
     .employee-header h3 {
         margin: 0;
-        font-weight: 700;
+        font-weight: 800;
+        font-size: 26px;
+        color: #111827;
+        letter-spacing: -0.5px;
     }
 
     .employee-header p {
-        margin: 4px 0 0;
-        color: #6b7280;
+        margin: 6px 0 0;
+        color: #4b5563;
+        font-size: 16px;
+        font-weight: 500;
     }
 
+    /* Details Grid Styles */
     .detail-item {
         margin-bottom: 22px;
     }
@@ -81,6 +99,7 @@
         color: #111827;
     }
 
+    /* Action Buttons */
     .btn-edit {
         background: #2563eb;
         color: white;
@@ -88,11 +107,13 @@
         padding: 10px 22px;
         border-radius: 8px;
         font-weight: 600;
+        text-decoration: none;
     }
 
         .btn-edit:hover {
             background: #1d4ed8;
             color: white;
+            text-decoration: none;
         }
 
     .btn-back {
@@ -126,14 +147,26 @@
         <div class="employee-header">
 
             <div class="employee-avatar">
-                @Model.FullName.Substring(0, 1).ToUpper()
+                @if (string.IsNullOrWhiteSpace(Model.ProfileImagePath))
+                {
+                    <!-- Fallback to Initials if no image exists -->
+                    @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                    {
+                        @Model.FullName.Substring(0, 1).ToUpper()
+                    }
+                }
+                else
+                {
+                    <!-- Render the Photo using the Picture Action -->
+                    <img src="@Url.Action("Picture", "Employee", new { id = Model.Id })" alt="@Model.FullName" />
+                }
             </div>
 
             <div>
                 <h3>@Model.FullName</h3>
 
                 <p>
-                    @Model.JobTitle?.Title
+                    @(Model.JobTitle?.Title ?? "No Job Title Assigned")
                 </p>
             </div>
 
@@ -142,115 +175,52 @@
         <div class="row">
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Full Name
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.FullName
-                    </div>
-
+                    <span class="detail-label">Full Name</span>
+                    <div class="detail-value">@Model.FullName</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Email
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.Email
-                    </div>
-
+                    <span class="detail-label">Email</span>
+                    <div class="detail-value">@Model.Email</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Phone Number
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.PhoneNumber
-                    </div>
-
+                    <span class="detail-label">Phone Number</span>
+                    <div class="detail-value">@Model.PhoneNumber</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Department
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.Department?.Name
-                    </div>
-
+                    <span class="detail-label">Department</span>
+                    <div class="detail-value">@(Model.Department?.Name ?? "-")</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Job Title
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.JobTitle?.Title
-                    </div>
-
+                    <span class="detail-label">Job Title</span>
+                    <div class="detail-value">@(Model.JobTitle?.Title ?? "-")</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Hire Date
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.HireDate.ToShortDateString()
-                    </div>
-
+                    <span class="detail-label">Hire Date</span>
+                    <div class="detail-value">@Model.HireDate.ToString("MMM dd, yyyy")</div>
                 </div>
-
             </div>
 
             <div class="col-md-6">
-
                 <div class="detail-item">
-
-                    <span class="detail-label">
-                        Salary
-                    </span>
-
-                    <div class="detail-value">
-                        @Model.Salary.ToString("N2")
-                    </div>
-
+                    <span class="detail-label">Salary</span>
+                    <div class="detail-value">$@Model.Salary.ToString("N0")</div>
                 </div>
-
             </div>
 
         </div>
@@ -273,5 +243,4 @@
         </div>
 
     </div>
-
 </div>

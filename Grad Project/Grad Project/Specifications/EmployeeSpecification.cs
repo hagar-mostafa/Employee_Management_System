@@ -9,7 +9,7 @@ namespace Grad_Project.Specifications
 
         public int Take { get; set; }
         public int Skip { get; set; }
-        public bool IsPagination { get; set; }
+        public bool IsPagination { get; set; } = false;
 
 
         public EmployeeSpecification(EmployeeParams emp)
@@ -18,10 +18,14 @@ namespace Grad_Project.Specifications
             {
                 Criteria = (e => (!emp.JobTitleId.HasValue || e.JobTitleId == emp.JobTitleId) && (!emp.DepartmentId.HasValue || e.DepartmentId == emp.DepartmentId) &&
                 (string.IsNullOrWhiteSpace(emp.SearchText) || e.Email.Contains(emp.SearchText) || e.FullName.Contains(emp.SearchText)));
+
             }
+
+
         }
 
-        protected void AddPagination(int pageSize, int pageNumber)
+
+        public void AddPagination(int pageSize, int pageNumber)
         {
             IsPagination = true;
             Take = pageSize;

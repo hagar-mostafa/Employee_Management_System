@@ -1,6 +1,5 @@
 ﻿@model Grad_Project.Models.Employee
 
-
 @{
     ViewData["Title"] = "Delete Employee";
 }
@@ -44,33 +43,48 @@
     .employee-header {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 25px;
         padding-bottom: 25px;
         margin-bottom: 25px;
         border-bottom: 1px solid #eee;
     }
 
+    /* Updated Portrait Avatar Style to Show Full Photo & Head Clearly */
     .employee-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
+        width: 110px;
+        height: 140px;
+        border-radius: 14px;
         background: #dc2626;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 38px;
         font-weight: 700;
+        overflow: hidden;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+        border: 3px solid #ffffff;
     }
+
+        .employee-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
 
     .employee-header h3 {
         margin: 0;
         font-weight: 700;
+        font-size: 24px;
+        color: #111827;
     }
 
     .employee-header p {
         margin: 4px 0 0;
         color: #6b7280;
+        font-size: 15px;
     }
 
     .detail-item {
@@ -109,6 +123,7 @@
         padding: 10px 22px;
         border-radius: 8px;
         margin-left: 8px;
+        text-decoration: none;
     }
 </style>
 
@@ -142,14 +157,24 @@
         <div class="employee-header">
 
             <div class="employee-avatar">
-                @Model.FullName.Substring(0, 1).ToUpper()
+                @if (string.IsNullOrWhiteSpace(Model.ProfileImagePath))
+                {
+                    @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                    {
+                        @Model.FullName.Substring(0, 1).ToUpper()
+                    }
+                }
+                else
+                {
+                    <img src="@Url.Action("Picture", "Employee", new { id = Model.Id })" alt="@Model.FullName" />
+                }
             </div>
 
             <div>
                 <h3>@Model.FullName</h3>
 
                 <p>
-                    @Model.JobTitle?.Title
+                    @(Model.JobTitle?.Title ?? "No Job Title")
                 </p>
             </div>
 
@@ -207,7 +232,7 @@
                     </span>
 
                     <div class="detail-value">
-                        @Model.Department?.Name
+                        @(Model.Department?.Name ?? "-")
                     </div>
                 </div>
 
@@ -221,7 +246,7 @@
                     </span>
 
                     <div class="detail-value">
-                        @Model.JobTitle?.Title
+                        @(Model.JobTitle?.Title ?? "-")
                     </div>
                 </div>
 
@@ -269,5 +294,4 @@
         </div>
 
     </div>
-
 </div>
