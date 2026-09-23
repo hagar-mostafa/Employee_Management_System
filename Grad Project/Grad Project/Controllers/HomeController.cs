@@ -1,25 +1,31 @@
-using Grad_Project.Models;
+using Grad_Project.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grad_Project.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _context;
+
+        public HomeController(AppDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            ViewBag.EmployeeCount = await _context.Employees.CountAsync();
+            ViewBag.DepartmentCount = await _context.Departments.CountAsync();
+            ViewBag.JobTitleCount = await _context.JobTitles.CountAsync();
+            ViewBag.RecentEmployees = await _context.Employees
+                .Include(e => e.Department)
+                .Include(e => e.JobTitle)
+                .OrderByDescending(e => e.HireDate)
+                .Take(5)
+                .ToListAsync();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }
